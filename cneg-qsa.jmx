@@ -107,7 +107,7 @@
             <boolProp name="displaySystemProperties">false</boolProp>
           </DebugSampler>
           <hashTree/>
-          <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" testclass="kg.apc.jmeter.samplers.DummySampler" testname="extract views ${view}" enabled="true">
+          <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" testclass="kg.apc.jmeter.samplers.DummySampler" testname="**** Representation: ${view}" enabled="true">
             <boolProp name="WAITING">true</boolProp>
             <boolProp name="SUCCESFULL">true</boolProp>
             <stringProp name="RESPONSE_CODE">200</stringProp>
@@ -177,36 +177,13 @@ without actual network activity. This helps debugging tests.</stringProp>
             <boolProp name="ForeachController.useSeparator">true</boolProp>
           </ForeachController>
           <hashTree>
-            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="  Check for equivalent mimetypes ${mime}" enabled="true">
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="  Check for equivalent mimetypes ${mime}" enabled="false">
               <boolProp name="displayJMeterProperties">false</boolProp>
               <boolProp name="displayJMeterVariables">true</boolProp>
               <boolProp name="displaySystemProperties">false</boolProp>
             </DebugSampler>
-            <hashTree>
-              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script">switch ( vars.get(&quot;mime&quot;) ) {
-	case &quot;application/rdf+ttl&quot; :
-	 	vars.put(&quot;altmime&quot;, &quot;text/turtle&quot;) ;
-	 	break;
-	case &quot;text/turtle&quot; :
-	 	vars.put(&quot;altmime&quot;, &quot;application/rdf+ttl&quot;) ;
-	 	break;
-	 case &quot;applicatioin/ld+json&quot; :
-	 	vars.put(&quot;altmime&quot;, &quot;application/json&quot;) ;
-	 	break;
-	case &quot;applicatioin/son&quot; :
-	 	vars.put(&quot;altmime&quot;, &quot;application/ld+json&quot;) ;
-	 	break;
-	default: 
-		vars.put(&quot;altmime&quot;, vars.get(&quot;mime&quot;)) ;
-}</stringProp>
-              </BeanShellPreProcessor>
-              <hashTree/>
-            </hashTree>
-            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+            <hashTree/>
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="false">
               <boolProp name="displayJMeterProperties">false</boolProp>
               <boolProp name="displayJMeterVariables">true</boolProp>
               <boolProp name="displaySystemProperties">false</boolProp>
@@ -231,6 +208,38 @@ without actual network activity. This helps debugging tests.</stringProp>
               <stringProp name="HTTPSampler.response_timeout"></stringProp>
             </HTTPSamplerProxy>
             <hashTree>
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor" enabled="true">
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="script">switch ( vars.get(&quot;mime&quot;) ) {
+	case &quot;application/rdf+ttl&quot; :
+	 	vars.put(&quot;altmime&quot;, &quot;text/turtle&quot;) ;
+	 	break;
+	case &quot;text/turtle&quot; :
+	 	vars.put(&quot;altmime&quot;, &quot;application/rdf+ttl&quot;) ;
+	 	break;
+	 case &quot;applicatioin/ld+json&quot; :
+	 	vars.put(&quot;altmime&quot;, &quot;application/json&quot;) ;
+	 	break;
+	case &quot;applicatioin/json&quot; :
+	 	vars.put(&quot;altmime&quot;, &quot;application/ld+json&quot;) ;
+	 	break;
+	default: 
+		vars.put(&quot;altmime&quot;, vars.get(&quot;mime&quot;)) ;
+}</stringProp>
+              </BeanShellPreProcessor>
+              <hashTree/>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="check 200 response" enabled="false">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="1537176">200
+</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">40</intProp>
+              </ResponseAssertion>
+              <hashTree/>
               <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="check is mime ${mime} (or ${altmime} )" enabled="true">
                 <collectionProp name="Asserion.test_strings">
                   <stringProp name="-1632051746">Content-Type: ${mime}</stringProp>
