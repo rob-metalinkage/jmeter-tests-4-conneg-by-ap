@@ -1,4 +1,6 @@
 uri,http,qsa
 #http://localhost:8000/def/frog
+http://localhost:8000/def/x
 #https://w3id.org/mediatype/text/n3,Y,Y
-http://defs-dev.opengis.net/def/docs/10-140r1,Y,Y
+#http://defs-dev.opengis.net/def/docs/10-140r1,Y,Y
+#https://gsq.cat/foi/

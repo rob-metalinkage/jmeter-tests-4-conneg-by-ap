@@ -32,7 +32,7 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get alternates view ${path}" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get ${path}" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -40,164 +40,166 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${path}?_view=alternates&amp;_format=json</stringProp>
+          <stringProp name="HTTPSampler.path">${path}</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="TestPlan.comments">IF the server supports CNEG-AP then the Link Header will contain alternates information. This may be in the direct response (e.g. a  303 redirectr) or in the final resource.</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="false">
-            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-            <stringProp name="RegexExtractor.refname">extracted</stringProp>
-            <stringProp name="RegexExtractor.regex">.*opengis.net/def/(([^/]*)/)*(.*)</stringProp>
-            <stringProp name="RegexExtractor.template">$2$</stringProp>
-            <stringProp name="RegexExtractor.default">frog</stringProp>
-            <stringProp name="RegexExtractor.match_number">-1</stringProp>
-            <stringProp name="Sample.scope">variable</stringProp>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get link list" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">true</stringProp>
+            <stringProp name="RegexExtractor.refname">alt</stringProp>
+            <stringProp name="RegexExtractor.regex">Link: (.*)</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default">NoLink</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
             <stringProp name="Scope.variable">testme</stringProp>
           </RegexExtractor>
           <hashTree/>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
-            <stringProp name="JSONPostProcessor.referenceNames">def</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">result.primaryTopic._about.feature</stringProp>
-            <stringProp name="JSONPostProcessor.match_numbers">-1</stringProp>
-            <stringProp name="Sample.scope">all</stringProp>
-          </JSONPostProcessor>
-          <hashTree/>
-          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="getviewlist" enabled="true">
-            <stringProp name="VAR">view</stringProp>
-            <stringProp name="JSONPATH">result.primaryTopic.feature</stringProp>
-            <stringProp name="DEFAULT"></stringProp>
-            <stringProp name="VARIABLE"></stringProp>
-            <stringProp name="SUBJECT">BODY</stringProp>
-            <stringProp name="INPUT_FORMAT">JSON</stringProp>
-          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-          <hashTree/>
-        </hashTree>
-        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
-          <stringProp name="ForeachController.inputVal">view</stringProp>
-          <stringProp name="ForeachController.returnVal">viewjson</stringProp>
-          <boolProp name="ForeachController.useSeparator">true</boolProp>
-        </ForeachController>
-        <hashTree>
-          <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" testclass="kg.apc.jmeter.samplers.DummySampler" testname="extract views" enabled="true">
-            <boolProp name="WAITING">true</boolProp>
-            <boolProp name="SUCCESFULL">true</boolProp>
-            <stringProp name="RESPONSE_CODE">200</stringProp>
-            <stringProp name="RESPONSE_MESSAGE">OK</stringProp>
-            <stringProp name="REQUEST_DATA">Dummy Sampler used to simulate requests and responses
-without actual network activity. This helps debugging tests.</stringProp>
-            <stringProp name="RESPONSE_DATA">Dummy Sampler used to simulate requests and responses
-without actual network activity. This helps debugging tests.</stringProp>
-            <stringProp name="RESPONSE_TIME">${__Random(50,500)}</stringProp>
-            <stringProp name="LATENCY">${__Random(1,50)}</stringProp>
-            <stringProp name="CONNECT">${__Random(1,5)}</stringProp>
-          </kg.apc.jmeter.samplers.DummySampler>
-          <hashTree>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get label" enabled="true">
-              <stringProp name="VAR">viewlabel</stringProp>
-              <stringProp name="JSONPATH">label</stringProp>
-              <stringProp name="DEFAULT"></stringProp>
-              <stringProp name="VARIABLE">viewjson</stringProp>
-              <stringProp name="SUBJECT">VAR</stringProp>
-              <stringProp name="INPUT_FORMAT">JSON</stringProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-            <hashTree/>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get viewname" enabled="true">
-              <stringProp name="VAR">viewname</stringProp>
-              <stringProp name="JSONPATH">viewName</stringProp>
-              <stringProp name="DEFAULT"></stringProp>
-              <stringProp name="VARIABLE">viewjson</stringProp>
-              <stringProp name="SUBJECT">VAR</stringProp>
-              <stringProp name="INPUT_FORMAT">JSON</stringProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-            <hashTree/>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get format array" enabled="true">
-              <stringProp name="VAR">formatjson</stringProp>
-              <stringProp name="JSONPATH">hasFormat</stringProp>
-              <stringProp name="DEFAULT"></stringProp>
-              <stringProp name="VARIABLE">viewjson</stringProp>
-              <stringProp name="SUBJECT">VAR</stringProp>
-              <stringProp name="INPUT_FORMAT">JSON</stringProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-            <hashTree/>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get view scope " enabled="true">
-              <stringProp name="VAR">viewscope</stringProp>
-              <stringProp name="JSONPATH">featurescope</stringProp>
-              <stringProp name="DEFAULT">item</stringProp>
-              <stringProp name="VARIABLE">viewjson</stringProp>
-              <stringProp name="SUBJECT">VAR</stringProp>
-              <stringProp name="INPUT_FORMAT">JSON</stringProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-            <hashTree/>
-          </hashTree>
-          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+          <DebugPostProcessor guiclass="TestBeanGUI" testclass="DebugPostProcessor" testname="Debug PostProcessor" enabled="true">
             <boolProp name="displayJMeterProperties">false</boolProp>
             <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySamplerProperties">true</boolProp>
             <boolProp name="displaySystemProperties">false</boolProp>
-          </DebugSampler>
+          </DebugPostProcessor>
           <hashTree/>
-          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Only check item scope (i.e. not featurescope=set)  with ful path" enabled="true">
-            <stringProp name="IfController.condition">${__jexl3(&quot;${featurescope}&quot; != &quot;set&quot; )}</stringProp>
-            <boolProp name="IfController.evaluateAll">false</boolProp>
-          </IfController>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If  Link header" enabled="true">
+          <stringProp name="IfController.condition">${__jexl3(vars.get(&quot;alt&quot;) != &quot;NoLink&quot; )}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+        </IfController>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="extract profiles and mime types" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+String RXprofile=&apos;.*profile=&quot;([^&quot;]*)&quot;.*&apos; ;
+Pattern REGEX_profile = Pattern.compile(RXprofile)
+
+String[] links  = vars.get(&apos;alt&apos;).split(&apos;\\s*,\\s*&apos;);
+
+List profiles = new ArrayList();
+
+vars.put(&quot;debug&quot; , links[0]);
+for(int i=0;i&lt;links.length;i++)
+{
+    vars.put(&quot;link_&quot; + (i+1), links[i]);
+    Matcher isalt = REGEX_profile.matcher(links[i])
+    if( isalt.matches() ) {
+	    	String prof = isalt.group(1);
+	    
+	    	String resource;
+	     String type;
+
+	     if( ! profiles.contains(prof) ) { profiles.add(prof); }
+	     	
+	    	for( seg in links[i].split(&quot;\\s*;\\s*&quot;) ) {  	
+	    		if ( seg.startsWith(&quot;&lt;&quot;) ) {
+	    			resource = seg.substring(1,seg.length()-1 );
+	    		} else if ( seg.startsWith(&quot;type=&quot;) ) {
+	    			type = seg.substring(6,seg.length()-1 );
+	    		}
+	    	}
+
+	    	String typelist = vars.get(&quot;altprofile_types_&quot; + prof) ;
+	    	typelist = typelist == null ? &quot;&quot; : (typelist + &quot;,&quot;) ;
+	    	vars.put( &quot;altprofile_types_&quot; + prof , typelist + type  );
+    	}
+}
+for(int p=0;p&lt;profiles.size();p++) {
+ vars.put(&quot;altprofile_&quot; + (p+1) , profiles[p]);
+}
+</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="false">
+            <stringProp name="cacheKey">1c611928-ac8c-45f5-8753-22446e47bfb9</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script">import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+String RXprofile=&apos;.*profile=&quot;([^&quot;]*)&quot;.*&apos; ;
+Pattern REGEX_profile = Pattern.compile(RXprofile)
+
+String[] links  = vars.get(&apos;alt&apos;).split(&apos;\\s*,\\s*&apos;);
+
+int p = 0 ;
+vars.put(&quot;debug&quot; , links[0]);
+for(int i=0;i&lt;links.length;i++)
+{
+    vars.put(&quot;link_&quot; + (i+1), links[i]);
+    Matcher isalt = REGEX_profile.matcher(links[i])
+    if( isalt.matches() ) {
+	    	p++ ;
+	    	String prof = isalt.group(1);
+	    
+	    	String resource;
+	     String type;
+
+	     vars.put(&quot;altprofile_&quot; + p , prof);
+	     	
+	    	for( seg in links[i].split(&quot;\\s*;\\s*&quot;) ) {  	
+	    		if ( seg.startsWith(&quot;&lt;&quot;) ) {
+	    			resource = seg.substring(1,seg.length()-1 );
+	    		} else if ( seg.startsWith(&quot;type=&quot;) ) {
+	    			type = seg.substring(6,seg.length()-1 );
+	    		}
+	    	}
+	    	if( type == null ) {
+	    		
+		    AssertionResult.setFailure(true)
+	    		AssertionResult.setFailureMessage(&apos;Link to alternate resource without media type : &apos; + links[i] );
+	    	}
+	    	String typelist = vars.get(&quot;altprofile_types_&quot; + p) ;
+	    	typelist = typelist = null ? &quot;&quot; : (typelist + &quot;,&quot;) ;
+	    	vars.put( &quot;altprofile_types_&quot; + p , typelist + type  );
+    	}
+}</stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+          <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
+            <stringProp name="ForeachController.inputVal">altprofile</stringProp>
+            <stringProp name="ForeachController.returnVal">prof</stringProp>
+            <boolProp name="ForeachController.useSeparator">true</boolProp>
+          </ForeachController>
           <hashTree>
+            <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="extract mime types list for prof" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters">${prof}</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey"></stringProp>
+              <stringProp name="script">String formats = vars.get( &quot;altprofile_types_&quot; + vars.get(&quot;prof&quot;) );
+String[] formatarray = formats.split(&apos;,&apos;) ;
+for ( int i = 0; i&lt; formatarray.length; i++ ) {
+	vars.put (&quot;format_&quot; + (i+1), formatarray[i]) ;
+}</stringProp>
+            </JSR223Sampler>
+            <hashTree/>
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${prof} ${__V(altprofile_types_${prof})}" enabled="false">
+              <boolProp name="displayJMeterProperties">false</boolProp>
+              <boolProp name="displayJMeterVariables">true</boolProp>
+              <boolProp name="displaySystemProperties">false</boolProp>
+            </DebugSampler>
+            <hashTree/>
             <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
-              <stringProp name="ForeachController.inputVal">formatjson</stringProp>
-              <stringProp name="ForeachController.returnVal">f</stringProp>
+              <stringProp name="ForeachController.inputVal">format</stringProp>
+              <stringProp name="ForeachController.returnVal">mime</stringProp>
               <boolProp name="ForeachController.useSeparator">true</boolProp>
             </ForeachController>
             <hashTree>
-              <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" testclass="kg.apc.jmeter.samplers.DummySampler" testname="extract format details for ${f}" enabled="true">
-                <boolProp name="WAITING">true</boolProp>
-                <boolProp name="SUCCESFULL">true</boolProp>
-                <stringProp name="RESPONSE_CODE">200</stringProp>
-                <stringProp name="RESPONSE_MESSAGE">OK</stringProp>
-                <stringProp name="REQUEST_DATA">Dummy Sampler used to simulate requests and responses
-without actual network activity. This helps debugging tests.</stringProp>
-                <stringProp name="RESPONSE_DATA">Dummy Sampler used to simulate requests and responses
-without actual network activity. This helps debugging tests.</stringProp>
-                <stringProp name="RESPONSE_TIME">${__Random(50,500)}</stringProp>
-                <stringProp name="LATENCY">${__Random(1,50)}</stringProp>
-                <stringProp name="CONNECT">${__Random(1,5)}</stringProp>
-              </kg.apc.jmeter.samplers.DummySampler>
-              <hashTree>
-                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get mime type URI" enabled="true">
-                  <stringProp name="VAR">formaturi</stringProp>
-                  <stringProp name="JSONPATH">_about</stringProp>
-                  <stringProp name="DEFAULT"></stringProp>
-                  <stringProp name="VARIABLE">f</stringProp>
-                  <stringProp name="SUBJECT">VAR</stringProp>
-                  <stringProp name="INPUT_FORMAT">JSON</stringProp>
-                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-                <hashTree/>
-                <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="get mime type" enabled="true">
-                  <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-                  <stringProp name="RegexExtractor.refname">mime</stringProp>
-                  <stringProp name="RegexExtractor.regex">http://purl.org/NET/mediatypes/(.*)</stringProp>
-                  <stringProp name="RegexExtractor.template">$1$</stringProp>
-                  <stringProp name="RegexExtractor.default"></stringProp>
-                  <stringProp name="RegexExtractor.match_number">1</stringProp>
-                  <stringProp name="Sample.scope">variable</stringProp>
-                  <stringProp name="Scope.variable">formaturi</stringProp>
-                </RegexExtractor>
-                <hashTree/>
-                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="format : name" enabled="true">
-                  <stringProp name="VAR">formatname</stringProp>
-                  <stringProp name="JSONPATH">ldatoken</stringProp>
-                  <stringProp name="DEFAULT"></stringProp>
-                  <stringProp name="VARIABLE">f</stringProp>
-                  <stringProp name="SUBJECT">VAR</stringProp>
-                  <stringProp name="INPUT_FORMAT">JSON</stringProp>
-                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-                <hashTree/>
-              </hashTree>
-              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Check for equivalent mimetypes ${formatname} : ${mime}" enabled="true">
+              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Check for equivalent mimetypes for ${mime}" enabled="true">
                 <boolProp name="displayJMeterProperties">false</boolProp>
                 <boolProp name="displayJMeterVariables">true</boolProp>
                 <boolProp name="displaySystemProperties">false</boolProp>
@@ -226,7 +228,26 @@ without actual network activity. This helps debugging tests.</stringProp>
                 </BeanShellPreProcessor>
                 <hashTree/>
               </hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request  ${viewname} ${formatname} ${mime} ${altmime}" enabled="true">
+              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${prof} -- ${mime}" enabled="true">
+                <boolProp name="displayJMeterProperties">false</boolProp>
+                <boolProp name="displayJMeterVariables">true</boolProp>
+                <boolProp name="displaySystemProperties">false</boolProp>
+              </DebugSampler>
+              <hashTree/>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="" elementType="Header">
+                    <stringProp name="Header.name">Accept-profile</stringProp>
+                    <stringProp name="Header.value">${prof}</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="Header">
+                    <stringProp name="Header.name">Accept:</stringProp>
+                    <stringProp name="Header.value">${mime}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request  ${path}  -- ${prof}  -- ${mime}" enabled="true">
                 <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                   <collectionProp name="Arguments.arguments"/>
                 </elementProp>
@@ -234,7 +255,7 @@ without actual network activity. This helps debugging tests.</stringProp>
                 <stringProp name="HTTPSampler.port"></stringProp>
                 <stringProp name="HTTPSampler.protocol"></stringProp>
                 <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">${path}?_view=${viewname}&amp;_format=${formatname}</stringProp>
+                <stringProp name="HTTPSampler.path">${path}</stringProp>
                 <stringProp name="HTTPSampler.method">GET</stringProp>
                 <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
                 <boolProp name="HTTPSampler.auto_redirects">false</boolProp>

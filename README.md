@@ -18,8 +18,6 @@ Current QSA
 ## usage
 Open cneg.jmx in Apache Jmeter and update the user variables to point to a file that lists the resources you wish to check (or edit testtargets.csv). Select "view results" and run suite. By default it will show all results. 
 
-![Example run - showing success and failure modes for different profiles](snapshot.PNG)
-
 ## features
 * Checks for both HTTP and Query string argument forms for negotiation
 * in QSA mode it reads "all" profile to determine all the combinations to test
