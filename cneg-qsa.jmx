@@ -164,14 +164,25 @@ without actual network activity. This helps debugging tests.</stringProp>
             <stringProp name="CONNECT">${__Random(1,5)}</stringProp>
           </kg.apc.jmeter.samplers.DummySampler>
           <hashTree>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get representation node ${viewjson}" enabled="true">
+            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get representation node ${view}" enabled="true">
               <stringProp name="VAR">repnode</stringProp>
               <stringProp name="JSONPATH">$[?(@.[&apos;@id&apos;] == &apos;${view}&apos;)]</stringProp>
-              <stringProp name="DEFAULT">failed to get ${view}</stringProp>
+              <stringProp name="DEFAULT">failed find view</stringProp>
               <stringProp name="VARIABLE">json</stringProp>
               <stringProp name="SUBJECT">VAR</stringProp>
               <stringProp name="INPUT_FORMAT">JSON</stringProp>
             </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="21377161">failed find view</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">12</intProp>
+              <stringProp name="Assertion.scope">variable</stringProp>
+              <stringProp name="Scope.variable">repnode</stringProp>
+            </ResponseAssertion>
             <hashTree/>
             <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get viewname" enabled="false">
               <stringProp name="VAR">viewname</stringProp>
@@ -185,11 +196,22 @@ without actual network activity. This helps debugging tests.</stringProp>
             <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get format array" enabled="true">
               <stringProp name="VAR">mimelist</stringProp>
               <stringProp name="JSONPATH">$..[&apos;http://purl.org/dc/terms/format&apos;]..[&apos;@value&apos;]</stringProp>
-              <stringProp name="DEFAULT">failed to parse</stringProp>
+              <stringProp name="DEFAULT">Failed to find format list</stringProp>
               <stringProp name="VARIABLE">repnode</stringProp>
               <stringProp name="SUBJECT">VAR</stringProp>
               <stringProp name="INPUT_FORMAT">JSON</stringProp>
             </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="-218467838">Failed to find format list</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">12</intProp>
+              <stringProp name="Assertion.scope">variable</stringProp>
+              <stringProp name="Scope.variable">mimelist</stringProp>
+            </ResponseAssertion>
             <hashTree/>
             <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="get view scope " enabled="false">
               <stringProp name="VAR">viewscope</stringProp>
@@ -209,7 +231,7 @@ without actual network activity. This helps debugging tests.</stringProp>
             </JSONPostProcessor>
             <hashTree/>
           </hashTree>
-          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${view}" enabled="false">
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${view}" enabled="true">
             <boolProp name="displayJMeterProperties">false</boolProp>
             <boolProp name="displayJMeterVariables">true</boolProp>
             <boolProp name="displaySystemProperties">false</boolProp>
@@ -284,7 +306,7 @@ without actual network activity. This helps debugging tests.</stringProp>
                 <intProp name="Assertion.test_type">40</intProp>
               </ResponseAssertion>
               <hashTree/>
-              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="check is mime ${mime} (or ${altmime} )" enabled="true">
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="check response matches mime type ${mime} (or ${altmime} )" enabled="true">
                 <collectionProp name="Asserion.test_strings">
                   <stringProp name="-1632051746">Content-Type: ${mime}</stringProp>
                   <stringProp name="2007153547">Content-Type: ${altmime}</stringProp>
