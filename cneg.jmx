@@ -59,7 +59,7 @@
             <boolProp name="IfController.evaluateAll">false</boolProp>
           </IfController>
           <hashTree>
-            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="true">
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="false">
               <boolProp name="displayJMeterProperties">false</boolProp>
               <boolProp name="displayJMeterVariables">true</boolProp>
               <boolProp name="displaySystemProperties">false</boolProp>
@@ -70,7 +70,7 @@
               <boolProp name="IfController.evaluateAll">false</boolProp>
             </IfController>
             <hashTree>
-              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="true">
+              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug QSA: ${path}" enabled="true">
                 <boolProp name="displayJMeterProperties">false</boolProp>
                 <boolProp name="displayJMeterVariables">true</boolProp>
                 <boolProp name="displaySystemProperties">false</boolProp>
@@ -86,7 +86,7 @@
               <boolProp name="IfController.evaluateAll">false</boolProp>
             </IfController>
             <hashTree>
-              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="true">
+              <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="false">
                 <boolProp name="displayJMeterProperties">false</boolProp>
                 <boolProp name="displayJMeterVariables">true</boolProp>
                 <boolProp name="displaySystemProperties">false</boolProp>
