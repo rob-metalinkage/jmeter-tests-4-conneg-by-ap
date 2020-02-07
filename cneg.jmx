@@ -51,27 +51,15 @@
             <boolProp name="recycle">false</boolProp>
             <stringProp name="shareMode">shareMode.all</stringProp>
             <boolProp name="stopThread">false</boolProp>
-            <stringProp name="variableNames">uri,http,qsa</stringProp>
+            <stringProp name="variableNames">path,http,qsa</stringProp>
           </CSVDataSet>
           <hashTree/>
-          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If not EOF " enabled="true">
-            <stringProp name="IfController.condition">${__jexl3(&quot;${uri}&quot;.startsWith(&quot;http&quot; ) )}</stringProp>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If a HTTP URL" enabled="true">
+            <stringProp name="IfController.condition">${__jexl3(&quot;${path}&quot;.startsWith(&quot;http&quot; ) )}</stringProp>
             <boolProp name="IfController.evaluateAll">false</boolProp>
           </IfController>
           <hashTree>
-            <kg.apc.jmeter.control.ParameterizedController guiclass="kg.apc.jmeter.control.ParameterizedControllerGui" testclass="kg.apc.jmeter.control.ParameterizedController" testname="Set path = base : ${uri}" enabled="true">
-              <elementProp name="ParameterizedController" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Set path = base : ${uri}" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="path" elementType="Argument">
-                    <stringProp name="Argument.name">path</stringProp>
-                    <stringProp name="Argument.value">${uri}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-            </kg.apc.jmeter.control.ParameterizedController>
-            <hashTree/>
-            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler" enabled="true">
+            <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="true">
               <boolProp name="displayJMeterProperties">false</boolProp>
               <boolProp name="displayJMeterVariables">true</boolProp>
               <boolProp name="displaySystemProperties">false</boolProp>
