@@ -40,7 +40,7 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${path}?_profile=alt&amp;_mediatype=application/json</stringProp>
+          <stringProp name="HTTPSampler.path">${path}?_profile=alt&amp;_mediatype=application/ld+json</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -109,7 +109,7 @@
           </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
           <hashTree/>
         </hashTree>
-        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Check response is valid json" enabled="false">
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Check response is valid json" enabled="true">
           <collectionProp name="Asserion.test_strings">
             <stringProp name="123127415">Failed to parse json</stringProp>
           </collectionProp>
@@ -255,7 +255,7 @@ without actual network activity. This helps debugging tests.</stringProp>
               <boolProp name="displaySystemProperties">false</boolProp>
             </DebugSampler>
             <hashTree/>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="    - HTTP Request ${path} ${viewname} ${mime} ( ${altmime})" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="    - ${path}?_profile=${viewname}&amp;_mediatype=${__urlencode(${mime})}" enabled="true">
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
               </elementProp>
