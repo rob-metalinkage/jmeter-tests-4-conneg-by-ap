@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.3 r1808647">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -24,6 +24,7 @@
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
         <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -57,6 +58,7 @@
           <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If a HTTP URL" enabled="true">
             <stringProp name="IfController.condition">${__jexl3(&quot;${path}&quot;.startsWith(&quot;http&quot; ) )}</stringProp>
             <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
           </IfController>
           <hashTree>
             <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="false">
@@ -68,6 +70,7 @@
             <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If use QSA" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(&quot;${qsa}&quot; != &quot;N&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
             </IfController>
             <hashTree>
               <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug QSA: ${path}" enabled="true">
@@ -84,6 +87,7 @@
             <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If use HTTP" enabled="true">
               <stringProp name="IfController.condition">${__jexl3(&quot;${http}&quot; != &quot;N&quot;)}</stringProp>
               <boolProp name="IfController.evaluateAll">false</boolProp>
+              <boolProp name="IfController.useExpression">true</boolProp>
             </IfController>
             <hashTree>
               <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug: ${path}" enabled="false">
@@ -137,9 +141,5 @@
         <hashTree/>
       </hashTree>
     </hashTree>
-    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
-      <boolProp name="WorkBench.save">true</boolProp>
-    </WorkBench>
-    <hashTree/>
   </hashTree>
 </jmeterTestPlan>
