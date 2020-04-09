@@ -1,23 +1,24 @@
 # jmeter-tests-4-conneg-by-ap
 An Apache JMeter test for the behaviour of resources implementing "Content negotiation by profile (CNEG-AP)" (https://www.w3.org/TR/dx-prof-conneg/)
 
-CNEG-AP supports the means to list available profiles and the media types they support. 
+CNEG-AP supports the means to list available informations profiles offered by a server for a given resource, and the media types available per profile. 
 
-The validation suite accesses this list per resource identified and checked each profile returns the correct media type - and identifies the profile being matched.
+The validation suite accesses this list per resource identified and checks each profile returns the correct media type - and identifies the profile being matched.
 
 negotiation is checked by use of dummy profiles that are not supported in the Accept-profile list, and by inclusion of multiple supported profiles to ensure the preferred option is returned.
 
-Both HTTP and QSA (query string argument) methods of CNEG-AP are supported.
+Both HTTP and QSA (query string argument) methods of CNEG-AP are supported. QSA is only supported for resources offering JSON-LD encodings using the content model defined in the specification. 
 
 ## status
-This will track the emerging draft recommendation.
+This will track the current released version of the specification.
 
 It is fairly crude - contributions to make it easier to configure and improve reporting are welcome.
 
+Tested with Apache Jmeter 5.2.1
 
 ## features
 * Checks for both HTTP and Query string argument forms for negotiation
-* in QSA mode it reads the canonical "all" profile to determine all the combinations to test. It checks that the response declares the correct Content-Profile responss
+* in QSA mode it reads the canonical *"alt"* profile using JSON-LD to determine all the combinations to test. It checks that the response declares the correct Content-Profile in the HTTP headers.
 * in HTTP mode it uses HTTP Link headers accessed via HTTP HEAD requests to determine all combinations
 * all combinations of advertised profiles and formats are accessed
 * responses are checked for returning correct Mime type only
@@ -32,8 +33,10 @@ Conformance Failures will show in two modes:
 
 ![](Results.PNG)
 
+## Issues
+JSON-LD may be encoded using prefixes and external context documents. As a canonical context document is not published this mode is not supported - full URIs are necessary.  This matches the behaviour of python RDFLib JSON-LD encoder. If more flexible options are required it is recommended to rebuild this tool in an environment that supports JSON-LD decoding natively.
+
 ## possible future improvements (help welcomed)
-* optional strict mode to for declaration of returned Content-profile matches request 
 * resolve profile URIs and get profile descriptions and validation resources - and check not just conneg function but also conformance of resources
 * resolve profile URIs and identify profile hierarchies and check that requests for more general profiles return specific profiles.
 * check HTTP and QSA are equivalent
