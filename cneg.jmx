@@ -40,7 +40,7 @@
         </Arguments>
         <hashTree/>
         <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-          <stringProp name="WhileController.condition">${__jexl3(&quot;${uri}&quot; != &quot;&lt;EOF&gt;&quot;)}</stringProp>
+          <stringProp name="WhileController.condition">${__jexl3(&quot;${path}&quot; != &quot;&lt;EOF&gt;&quot;)}</stringProp>
         </WhileController>
         <hashTree>
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
@@ -51,7 +51,7 @@
             <boolProp name="quotedData">true</boolProp>
             <boolProp name="recycle">false</boolProp>
             <stringProp name="shareMode">shareMode.all</stringProp>
-            <boolProp name="stopThread">false</boolProp>
+            <boolProp name="stopThread">true</boolProp>
             <stringProp name="variableNames">path,http,qsa</stringProp>
           </CSVDataSet>
           <hashTree/>

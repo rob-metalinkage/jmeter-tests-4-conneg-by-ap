@@ -32,15 +32,45 @@
           </collectionProp>
         </HeaderManager>
         <hashTree/>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">log.info vars.get(&quot;path&quot;)
+input =vars.get(&quot;path&quot;)
+URI ulrString = new URI(input)
+vars.put(&quot;gProtocol&quot;,ulrString.getScheme().toString())
+vars.put(&quot;gHost&quot;,ulrString.getHost().toString())
+vars.put(&quot;gPort&quot;,ulrString.getPort().toString())
+vars.put(&quot;gPathUrl&quot;,ulrString.getPath().toString())
+log.info vars.get(&quot;gPathUrl&quot;)</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223PreProcessor>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="QSA: Get alternates view ${path}" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="_profile" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">alt</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">_profile</stringProp>
+              </elementProp>
+              <elementProp name="_mediatype" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">application/ld+json</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">_mediatype</stringProp>
+              </elementProp>
+            </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.domain">${gHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${gPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${gProtocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${path}?_profile=alt&amp;_mediatype=application/ld%2Bjson</stringProp>
+          <stringProp name="HTTPSampler.path">${gPathUrl}</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -106,6 +136,16 @@
             <stringProp name="JSONPostProcessor.defaultValues">Profile not found</stringProp>
           </JSONPostProcessor>
           <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="extract global profiles" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">proflist</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$..[?(@.[&apos;@type&apos;][0] == &apos;http://www.w3.org/ns/prof/Profile&apos; || @.[&apos;@type&apos;] == &apos;http://www.w3.org/ns/prof/Profile&apos;)]</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">-1</stringProp>
+            <stringProp name="Sample.scope">variable</stringProp>
+            <stringProp name="Scope.variable">json</stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">Global profile not found</stringProp>
+            <stringProp name="TestPlan.comments">Extract tokens attached to profiles, not specific representations</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
         </hashTree>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Check response is valid json" enabled="true">
           <collectionProp name="Asserion.test_strings">
@@ -120,12 +160,6 @@
           <stringProp name="Assertion.custom_message"></stringProp>
         </ResponseAssertion>
         <hashTree/>
-        <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${viewlist}" enabled="true">
-          <boolProp name="displayJMeterProperties">false</boolProp>
-          <boolProp name="displayJMeterVariables">true</boolProp>
-          <boolProp name="displaySystemProperties">false</boolProp>
-        </DebugSampler>
-        <hashTree/>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Check response contains profile list" enabled="true">
           <collectionProp name="Asserion.test_strings">
             <stringProp name="1434153548">No profile found</stringProp>
@@ -138,6 +172,74 @@
           <stringProp name="Scope.variable">viewlist</stringProp>
           <stringProp name="Assertion.custom_message"></stringProp>
         </ResponseAssertion>
+        <hashTree/>
+        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Profile map tokens to URI" enabled="true">
+          <stringProp name="ForeachController.inputVal">proflist</stringProp>
+          <stringProp name="ForeachController.returnVal">profmeta</stringProp>
+          <boolProp name="ForeachController.useSeparator">true</boolProp>
+        </ForeachController>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="gettoken" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">proftoken</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$[&apos;http://www.w3.org/ns/prof/token&apos;]..[&apos;@value&apos;]</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">0</stringProp>
+            <stringProp name="Sample.scope">variable</stringProp>
+            <stringProp name="Scope.variable">profmeta</stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">Global profile not found</stringProp>
+            <stringProp name="TestPlan.comments">Extract tokens attached to profiles, not specific representations</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="getURI" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">profuri</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$[&apos;@id&apos;]</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">0</stringProp>
+            <stringProp name="Sample.scope">variable</stringProp>
+            <stringProp name="Scope.variable">profmeta</stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">Global profile not found</stringProp>
+            <stringProp name="TestPlan.comments">Extract tokens attached to profiles, not specific representations</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Save uri-token mapping ${proftoken} -&gt; ${profuri} " enabled="true">
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <boolProp name="resetInterpreter">false</boolProp>
+            <stringProp name="script">Map map = null;    
+ if (bsh.shared.map == void) {
+    map = new HashMap();        
+}
+else {
+    map = bsh.shared.map;        
+}
+
+map.put(vars.get(&quot;profuri&quot;),vars.get(&quot;proftoken&quot;));
+bsh.shared.map = map;
+
+</stringProp>
+          </BeanShellPostProcessor>
+          <hashTree/>
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="test" enabled="false">
+            <boolProp name="displayJMeterProperties">false</boolProp>
+            <boolProp name="displayJMeterVariables">true</boolProp>
+            <boolProp name="displaySystemProperties">false</boolProp>
+          </DebugSampler>
+          <hashTree/>
+        </hashTree>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="dump global profile tokens" enabled="false">
+          <stringProp name="BeanShellSampler.query">Map map = bsh.shared.map;
+
+Iterator iterator = map.entrySet().iterator();
+
+while (iterator.hasNext()) {
+        Map.Entry pair = (Map.Entry)iterator.next();
+        String uri = pair.getKey();
+        String token = pair.getValue();
+        //do what you need to do with the values from the HashMap   
+        print( uri + &quot; --&gt; &quot; +  token) ;       
+}</stringProp>
+          <stringProp name="BeanShellSampler.filename"></stringProp>
+          <stringProp name="BeanShellSampler.parameters"></stringProp>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
         <hashTree/>
         <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller" enabled="true">
           <stringProp name="ForeachController.inputVal">viewlist</stringProp>
@@ -193,6 +295,15 @@
               <stringProp name="Assertion.custom_message">Failed to find supported mimetypes for ${view}</stringProp>
             </ResponseAssertion>
             <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="get view conformance" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">viewprof</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$..[&apos;http://purl.org/dc/terms/conformsTo&apos;]..[&apos;@id&apos;]</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers">0</stringProp>
+              <stringProp name="Sample.scope">variable</stringProp>
+              <stringProp name="Scope.variable">repnode</stringProp>
+              <stringProp name="JSONPostProcessor.defaultValues">NoProfile</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
             <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="get viewname" enabled="true">
               <stringProp name="JSONPostProcessor.referenceNames">viewname</stringProp>
               <stringProp name="JSONPostProcessor.jsonPathExprs">$..[&apos;http://www.w3.org/ns/prof/token&apos;]..[&apos;@value&apos;]</stringProp>
@@ -201,6 +312,32 @@
               <stringProp name="Scope.variable">repnode</stringProp>
               <stringProp name="JSONPostProcessor.defaultValues">Failed to locate view token</stringProp>
             </JSONPostProcessor>
+            <hashTree/>
+            <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Use global prof token or uri" enabled="true">
+              <stringProp name="TestPlan.comments">check if global profile defines token if no explicit token for representation</stringProp>
+              <boolProp name="resetInterpreter">false</boolProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="script">Map map = bsh.shared.map;
+
+
+if( &quot;Failed to locate view token&quot;.equals(vars.get(&quot;viewname&quot;) )
+	&amp;&amp; 
+	(vars.get(&quot;viewprof&quot; ) != null ) )
+{
+	//print(  &quot; --&gt; &quot; + map.get(vars.get(&quot;viewprof&quot; ) ));
+	if ( map.get( vars.get(&quot;viewprof&quot; ) ) != null  ) 
+	{
+		// use token bound to global profile description 
+		vars.put(&quot;viewname&quot;, map.get( vars.get(&quot;viewprof&quot; ) ) ) ;
+	} else
+	{
+		// default to using the profile URI as the token 
+		vars.put(&quot;viewname&quot;, vars.get(&quot;viewprof&quot; ) ) ;
+	}
+}
+</stringProp>
+            </BeanShellPostProcessor>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assertion view token found" enabled="true">
               <collectionProp name="Asserion.test_strings">
@@ -215,7 +352,7 @@
             </ResponseAssertion>
             <hashTree/>
           </hashTree>
-          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${view}" enabled="true">
+          <DebugSampler guiclass="TestBeanGUI" testclass="DebugSampler" testname="Debug Sampler ${view}" enabled="false">
             <boolProp name="displayJMeterProperties">false</boolProp>
             <boolProp name="displayJMeterVariables">true</boolProp>
             <boolProp name="displaySystemProperties">false</boolProp>
